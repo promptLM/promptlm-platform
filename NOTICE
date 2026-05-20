@@ -1,0 +1,8 @@
+promptLM Platform
+Copyright (c) PromptLM contributors
+
+This product includes software developed at PromptLM (https://github.com/promptLM).
+
+This product is a Maven BOM + parent POM. It does not redistribute any
+third-party software. Versions pinned via the BOM are subject to their
+respective upstream licenses (notably Spring Boot, Apache-2.0).
