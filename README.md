@@ -10,7 +10,7 @@ in `promptlm-test-support`.
 | Artifact                              | Purpose                                                                                                                              |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `dev.promptlm:promptlm-dependencies`  | Pure BOM — pinned dependency versions (Spring Boot anchor). Imported via `<scope>import</scope>` from any consumer.                  |
-| `dev.promptlm:promptlm-parent`        | Thin build-policy parent — extends the BOM, sets `<maven.compiler.release>17</maven.compiler.release>`, pins plugin versions, `<proc>none</proc>`. |
+| `dev.promptlm:promptlm-parent`        | Thin build-policy parent — extends the BOM, sets `<maven.compiler.release>21</maven.compiler.release>`, pins plugin versions, `<proc>none</proc>`. |
 
 Both ship at the same version (lockstep — ADR 0004 D-Open-Q-7).
 
@@ -27,7 +27,7 @@ Both ship at the same version (lockstep — ADR 0004 D-Open-Q-7).
 ```
 
 Inherits dependency management (transitively from `promptlm-dependencies`)
-**and** build policy (Java 17, plugin versions, `<proc>none</proc>`).
+**and** build policy (Java 21, plugin versions, `<proc>none</proc>`).
 
 ### External consumers (have their own parent — Spring Boot, corporate, etc.)
 
