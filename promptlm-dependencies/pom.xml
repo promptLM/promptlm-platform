@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.promptlm</groupId>
+    <artifactId>promptlm-dependencies</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>promptLM Dependencies</name>
+    <description>
+        Bill-of-materials for the promptLM platform release train. Pins
+        Spring Boot, Spring AI, Spring Modulith, and other promptLM-wide
+        dependency versions. Consumers import via &lt;scope&gt;import&lt;/scope&gt; or
+        inherit transitively through promptlm-parent.
+    </description>
+    <url>https://github.com/promptLM/promptlm-platform</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/promptLM/promptlm-platform.git</connection>
+        <developerConnection>scm:git:https://github.com/promptLM/promptlm-platform.git</developerConnection>
+        <url>https://github.com/promptLM/promptlm-platform</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/promptLM/promptlm-platform</url>
+        </repository>
+        <snapshotRepository>
+            <id>github</id>
+            <name>GitHub Packages Snapshots</name>
+            <url>https://maven.pkg.github.com/promptLM/promptlm-platform</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <spring-boot.version>4.0.6</spring-boot.version>
+        <spring-ai.version>2.0.0-M5</spring-ai.version>
+        <spring-modulith.version>2.0.6</spring-modulith.version>
+        <swagger-annotations.version>2.2.50</swagger-annotations.version>
+        <promptlm-gitea-artifactory.version>1.2.0</promptlm-gitea-artifactory.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot BOM: transitively pins Jackson 3, SLF4J, Logback, Jetty, etc. -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-starter-core</artifactId>
+                <version>${spring-modulith.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-runtime</artifactId>
+                <version>${spring-modulith.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-events-api</artifactId>
+                <version>${spring-modulith.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

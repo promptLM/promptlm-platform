@@ -5,14 +5,14 @@
 
     <groupId>dev.promptlm</groupId>
     <artifactId>promptlm-platform</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>promptLM Platform (aggregator)</name>
     <description>
-        Aggregator for the promptLM platform release-train artifacts. Contains two
-        modules: a pure BOM (promptlm-bom) and a thin build-policy parent
-        (promptlm-parent) that imports the BOM. See ADR 0004 in
+        Aggregator for the promptLM platform release-train artifacts. Follows the
+        Spring Boot pattern: a pure BOM (promptlm-dependencies) and a build-policy
+        parent (promptlm-parent) that extends the BOM. See ADR 0004 in
         promptLM/promptlm-test-support for the design rationale.
     </description>
     <url>https://github.com/promptLM/promptlm-platform</url>
@@ -45,7 +45,7 @@
     </distributionManagement>
 
     <modules>
-        <module>promptlm-bom</module>
+        <module>promptlm-dependencies</module>
         <module>promptlm-parent</module>
     </modules>
 </project>
