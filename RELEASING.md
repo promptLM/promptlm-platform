@@ -1,7 +1,7 @@
 # Releasing promptlm-platform
 
 This document describes the release-train cadence for the
-`dev.promptlm:promptlm-bom` + `dev.promptlm:promptlm-parent` pair.
+`dev.promptlm:promptlm-dependencies` + `dev.promptlm:promptlm-parent` pair.
 
 ## Versioning policy: semver on the BOM
 
@@ -26,17 +26,18 @@ combination.
   there is anything to ship. Skip the month if the BOM is unchanged.
 - **Major releases: quarterly.** Cut at most once per calendar quarter,
   bundled with a written migration guide and the contained libraries'
-  major bumps. The next planned major is `2.0.0` — Spring Boot 3 → 4.
+  major bumps. While on the 0.x line, minor bumps may carry breaking
+  changes; the first major (`1.0.0`) marks the stable contract.
 - **Patch releases: as needed.** No fixed cadence; cut on demand when a
   contained library ships a bugfix that downstream repos need
   immediately.
 
 ## Train shape
 
-| Version | Anchor                | Status                              |
-| ------- | --------------------- | ----------------------------------- |
-| 1.x     | Spring Boot 3.5.x     | **Current.** Initial release 1.0.0. |
-| 2.x     | Spring Boot 4.x       | Planned. Coordinated breaking train.|
+| Version | Anchor                | Status                                                                 |
+| ------- | --------------------- | ---------------------------------------------------------------------- |
+| 0.x     | Spring Boot 4.x       | **Current.** Pre-stable line; first release `0.1.0`. Breaking changes allowed between minors. |
+| 1.x     | Spring Boot 4.x       | Planned. First stable train once the BOM contents are settled.         |
 
 ## Version selection process
 

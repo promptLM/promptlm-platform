@@ -7,10 +7,10 @@ in `promptlm-test-support`.
 
 ## Artifacts
 
-| Artifact                       | Purpose                                                                                                                              |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `dev.promptlm:promptlm-bom`    | Pure BOM — pinned dependency versions (Spring Boot anchor). Imported via `<scope>import</scope>` from any consumer.                  |
-| `dev.promptlm:promptlm-parent` | Thin build-policy parent — extends the BOM, sets `<maven.compiler.release>17</maven.compiler.release>`, pins plugin versions, `<proc>none</proc>`. |
+| Artifact                              | Purpose                                                                                                                              |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `dev.promptlm:promptlm-dependencies`  | Pure BOM — pinned dependency versions (Spring Boot anchor). Imported via `<scope>import</scope>` from any consumer.                  |
+| `dev.promptlm:promptlm-parent`        | Thin build-policy parent — extends the BOM, sets `<maven.compiler.release>21</maven.compiler.release>`, pins plugin versions, `<proc>none</proc>`. |
 
 Both ship at the same version (lockstep — ADR 0004 D-Open-Q-7).
 
@@ -22,12 +22,12 @@ Both ship at the same version (lockstep — ADR 0004 D-Open-Q-7).
 <parent>
     <groupId>dev.promptlm</groupId>
     <artifactId>promptlm-parent</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
 </parent>
 ```
 
-Inherits dependency management (transitively from `promptlm-bom`) **and**
-build policy (Java 17, plugin versions, `<proc>none</proc>`).
+Inherits dependency management (transitively from `promptlm-dependencies`)
+**and** build policy (Java 21, plugin versions, `<proc>none</proc>`).
 
 ### External consumers (have their own parent — Spring Boot, corporate, etc.)
 
@@ -36,8 +36,8 @@ build policy (Java 17, plugin versions, `<proc>none</proc>`).
     <dependencies>
         <dependency>
             <groupId>dev.promptlm</groupId>
-            <artifactId>promptlm-bom</artifactId>
-            <version>1.0.0</version>
+            <artifactId>promptlm-dependencies</artifactId>
+            <version>0.1.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -74,17 +74,18 @@ And in any consumer pom, declare the repository:
 
 ## Versioning
 
-Semver on the BOM — see [`RELEASING.md`](./RELEASING.md). The 1.x train
-anchors **Spring Boot 3.5.x**. The Spring Boot 3 → 4 migration is planned as
-the 2.0.0 train.
+Semver on the BOM — see [`RELEASING.md`](./RELEASING.md). The current
+**0.x** train anchors **Spring Boot 4.x** and is the pre-stable line; API
+and BOM contents may shift between minor versions. The first stable train
+will be cut as `1.0.0` once the contained-library set is settled.
 
 ## Layout
 
 ```
 promptlm-platform/
 ├── pom.xml                     # aggregator
-├── promptlm-bom/
+├── promptlm-dependencies/
 │   └── pom.xml                 # pure BOM (dependencyManagement only)
 └── promptlm-parent/
-    └── pom.xml                 # build-policy parent, <parent> = promptlm-bom
+    └── pom.xml                 # build-policy parent, <parent> = promptlm-dependencies
 ```
