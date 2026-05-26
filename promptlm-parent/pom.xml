@@ -137,11 +137,9 @@
                 </configuration>
             </plugin>
             <!--
-                License header enforcement is handled by:
-                  - Pre-commit hook (Lucas-C/insert-license) for developer-loop
-                    insertion (.pre-commit-config.yaml)
-                  - apache/skywalking-eyes/header GitHub Action in CI
-                    (.github/workflows/oss-checks.yml + .licenserc.yaml)
+                License header enforcement is handled in CI by the
+                apache/skywalking-eyes/header GitHub Action
+                (.github/workflows/oss-checks.yml + .licenserc.yaml).
                 There is no stable skywalking-eyes Maven plugin on Central,
                 so the action is the authoritative cross-language check.
 
