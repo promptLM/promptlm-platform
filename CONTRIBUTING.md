@@ -47,7 +47,7 @@ Commit messages and PR titles follow the
 
 Common types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`,
 `ci`, `perf`, `revert`. Breaking changes are flagged with `!` after the type
-(e.g. `feat!: drop JDK 17 support`) or a `BREAKING CHANGE:` footer.
+(e.g. `feat!: rename parent artifactId`) or a `BREAKING CHANGE:` footer.
 
 Examples:
 
@@ -95,23 +95,28 @@ Useful variants:
 # Build just the BOM
 ./mvnw -pl promptlm-dependencies -am clean install
 
-# Verify (runs license-header check via license-eye, format check via spotless)
+# Verify
 ./mvnw -B verify
+
+# Opt-in formatting check (Spotless: removeUnusedImports + importOrder)
+./mvnw -B -Pspotless verify
 ```
 
 CI runs the equivalent of `mvn -B -ntp clean install` on every push and PR.
 
 ## Code Style
 
-This module has no Java sources of its own, but the `promptlm-parent` POM
-ships `spotless-maven-plugin` and `skywalking-eyes` license-header tooling
-that downstream consumers inherit. If you contribute Java code to
-**consumer** repositories, run:
+This module has no Java sources of its own, but `promptlm-parent` declares
+`spotless-maven-plugin` in `<pluginManagement>` so downstream consumers can
+opt into it. If you contribute Java code to a **consumer** repository, run:
 
 ```sh
 ./mvnw spotless:apply
-./mvnw license-eye:format
 ```
+
+License headers are enforced by the pre-commit hook
+(`.pre-commit-config.yaml`) and the `apache/skywalking-eyes/header` GitHub
+Action — no Maven plugin involved.
 
 before committing.
 

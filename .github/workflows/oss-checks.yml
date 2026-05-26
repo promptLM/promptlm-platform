@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [main]
 
-# Both jobs use continue-on-error for the 0.1.0 release so noisy initial
-# findings don't block merges. Tighten to required checks post-0.1.0.
+# Both jobs use continue-on-error so noisy initial findings don't block
+# merges. Tighten to required checks once the baseline is clean.
 jobs:
   gitleaks:
     name: gitleaks (secret scan)

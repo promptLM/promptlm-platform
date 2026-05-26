@@ -74,10 +74,8 @@ And in any consumer pom, declare the repository:
 
 ## Versioning
 
-Semver on the BOM — see [`RELEASING.md`](./RELEASING.md). The current
-**0.x** train anchors **Spring Boot 4.x** and is the pre-stable line; API
-and BOM contents may shift between minor versions. The first stable train
-will be cut as `1.0.0` once the contained-library set is settled.
+Semver on the BOM — see [`RELEASING.md`](./RELEASING.md) for the bump rules
+and the release process.
 
 ## Layout
 

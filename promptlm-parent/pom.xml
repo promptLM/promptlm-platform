@@ -125,13 +125,13 @@
                                 <include>src/test/java/**/*.java</include>
                             </includes>
                             <!--
-                                Light-touch rules only for 0.1.0. We deliberately do NOT
-                                enable googleJavaFormat / palantirJavaFormat here — they
-                                would rewrite essentially every existing file. The header
-                                check stays out of Spotless because it is already enforced
-                                by the pre-commit hook (Lucas-C/insert-license) and the
-                                apache/skywalking-eyes/header GitHub Action in CI.
-                                Revisit adopting a formatter in a dedicated PR for 0.2.0.
+                                Light-touch rules only. We deliberately do NOT enable
+                                googleJavaFormat / palantirJavaFormat here — they would
+                                rewrite essentially every existing file. The header
+                                check stays out of Spotless because it is already
+                                enforced by the pre-commit hook (Lucas-C/insert-license)
+                                and the apache/skywalking-eyes/header GitHub Action.
+                                Revisit adopting a formatter in a dedicated reformat PR.
                             -->
                             <removeUnusedImports/>
                             <importOrder/>
@@ -164,8 +164,8 @@
             </plugin>
             <!--
                 Spotless is configured in <pluginManagement> above but NOT bound
-                to the default lifecycle for 0.1.0. Default `mvn verify` does
-                not run Spotless. To check formatting on demand:
+                to the default lifecycle. Default `mvn verify` does not run
+                Spotless. To check formatting on demand:
                     mvn -Pspotless verify        # check, fail on violations
                     mvn spotless:check           # check ad-hoc
                     mvn spotless:apply           # apply fixes locally
@@ -199,8 +199,7 @@
         <!--
             Opt-in formatting check. Activate with `-Pspotless` or by setting
             -Dspotless.check=true. Off by default so existing modules continue
-            to build until they are individually brought into formatting
-            compliance.
+            to build until they are brought into formatting compliance.
         -->
         <profile>
             <id>spotless</id>

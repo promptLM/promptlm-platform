@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- First public release of `dev.promptlm:promptlm-parent`, the build-policy
-  parent POM for promptLM repositories.
-- First public release of `dev.promptlm:promptlm-dependencies`, the bill of
-  materials (BOM) pinning Spring Boot, Spring AI, and shared test
-  dependencies for the promptLM release train.
+- `dev.promptlm:promptlm-parent` — build-policy parent POM.
+- `dev.promptlm:promptlm-dependencies` — bill of materials (BOM) pinning
+  Spring Boot, Spring AI, and shared test dependencies.
