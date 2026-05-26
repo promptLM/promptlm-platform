@@ -97,28 +97,19 @@ Useful variants:
 
 # Verify
 ./mvnw -B verify
-
-# Opt-in formatting check (Spotless: removeUnusedImports + importOrder)
-./mvnw -B -Pspotless verify
 ```
 
 CI runs the equivalent of `mvn -B -ntp clean install` on every push and PR.
 
 ## Code Style
 
-This module has no Java sources of its own, but `promptlm-parent` declares
-`spotless-maven-plugin` in `<pluginManagement>` so downstream consumers can
-opt into it. If you contribute Java code to a **consumer** repository, run:
-
-```sh
-./mvnw spotless:apply
-```
-
 License headers are enforced by the pre-commit hook
 (`.pre-commit-config.yaml`) and the `apache/skywalking-eyes/header` GitHub
 Action — no Maven plugin involved.
 
-before committing.
+A Java formatter is not enforced at build time yet. Plan is to adopt one
+(e.g. googleJavaFormat AOSP or Palantir) in a dedicated one-shot reformat
+PR before wiring it into `verify`.
 
 ## Releasing
 

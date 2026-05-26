@@ -43,8 +43,6 @@
         <maven-deploy-plugin.version>3.1.3</maven-deploy-plugin.version>
         <spring-boot-maven-plugin.version>${spring-boot.version}</spring-boot-maven-plugin.version>
         <native.maven.plugin.version>0.11.5</native.maven.plugin.version>
-
-        <spotless-maven-plugin.version>2.46.1</spotless-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -114,30 +112,6 @@
                     <artifactId>native-maven-plugin</artifactId>
                     <version>${native.maven.plugin.version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>com.diffplug.spotless</groupId>
-                    <artifactId>spotless-maven-plugin</artifactId>
-                    <version>${spotless-maven-plugin.version}</version>
-                    <configuration>
-                        <java>
-                            <includes>
-                                <include>src/main/java/**/*.java</include>
-                                <include>src/test/java/**/*.java</include>
-                            </includes>
-                            <!--
-                                Light-touch rules only. We deliberately do NOT enable
-                                googleJavaFormat / palantirJavaFormat here — they would
-                                rewrite essentially every existing file. The header
-                                check stays out of Spotless because it is already
-                                enforced by the pre-commit hook (Lucas-C/insert-license)
-                                and the apache/skywalking-eyes/header GitHub Action.
-                                Revisit adopting a formatter in a dedicated reformat PR.
-                            -->
-                            <removeUnusedImports/>
-                            <importOrder/>
-                        </java>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -163,14 +137,6 @@
                 </configuration>
             </plugin>
             <!--
-                Spotless is configured in <pluginManagement> above but NOT bound
-                to the default lifecycle. Default `mvn verify` does not run
-                Spotless. To check formatting on demand:
-                    mvn -Pspotless verify        # check, fail on violations
-                    mvn spotless:check           # check ad-hoc
-                    mvn spotless:apply           # apply fixes locally
-                The opt-in `spotless` profile is declared below.
-
                 License header enforcement is handled by:
                   - Pre-commit hook (Lucas-C/insert-license) for developer-loop
                     insertion (.pre-commit-config.yaml)
@@ -178,6 +144,11 @@
                     (.github/workflows/oss-checks.yml + .licenserc.yaml)
                 There is no stable skywalking-eyes Maven plugin on Central,
                 so the action is the authoritative cross-language check.
+
+                Java formatting is intentionally not enforced at the build
+                level yet. Adopt a formatter (googleJavaFormat AOSP, Palantir,
+                or similar) in a dedicated one-shot reformat PR before
+                re-introducing build-time enforcement.
             -->
         </plugins>
     </build>
@@ -196,36 +167,5 @@
             </properties>
         </profile>
 
-        <!--
-            Opt-in formatting check. Activate with `-Pspotless` or by setting
-            -Dspotless.check=true. Off by default so existing modules continue
-            to build until they are brought into formatting compliance.
-        -->
-        <profile>
-            <id>spotless</id>
-            <activation>
-                <property>
-                    <name>spotless.check</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.diffplug.spotless</groupId>
-                        <artifactId>spotless-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>spotless-check</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 </project>
