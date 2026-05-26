@@ -103,9 +103,12 @@ CI runs the equivalent of `mvn -B -ntp clean install` on every push and PR.
 
 ## Code Style
 
-License headers are enforced by the pre-commit hook
-(`.pre-commit-config.yaml`) and the `apache/skywalking-eyes/header` GitHub
-Action — no Maven plugin involved.
+License headers are enforced in CI by the
+[`apache/skywalking-eyes/header`](https://github.com/apache/skywalking-eyes)
+action using the rules in `.licenserc.yaml`. Copy the header from any
+existing source file when adding a new file. If you'd like to auto-fix
+locally, install `license-eye` (`brew install skywalking-eyes`) and run
+`license-eye -c .licenserc.yaml header fix`.
 
 A Java formatter is not enforced at build time yet. Plan is to adopt one
 (e.g. googleJavaFormat AOSP or Palantir) in a dedicated one-shot reformat
