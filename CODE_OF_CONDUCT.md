@@ -1,25 +1,29 @@
 # Code of Conduct
 
-promptLM is a small open-source project, and the community around it should
-feel welcoming, focused, and low-drama. This document describes how we expect
-contributors, maintainers, and visitors to behave when interacting in any
-project space — issues, pull requests, discussions, chat, or in person at
-project events.
+## Our Pledge
 
-We want people to feel comfortable asking beginner questions, disagreeing on
-technical decisions, and sharing work-in-progress code. Be patient, assume
-good faith, and explain your reasoning rather than dismissing others. Critique
-ideas, not people. Harassment, personal attacks, discriminatory remarks,
-sustained disruption, sexualised language directed at others, and similar
-hostile behaviour are not welcome and will be addressed by maintainers.
+We as contributors and maintainers pledge to make participation in the promptLM
+project a harassment-free experience for everyone, regardless of age, body size,
+disability, ethnicity, gender identity and expression, level of experience,
+nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-If you see or experience behaviour that conflicts with this spirit, please
-report it privately to **conduct@promptlm.dev**. Reports will be handled
-discreetly and in good faith. Maintainers may respond with anything from a
-private note to a temporary or permanent ban from project spaces, depending on
-the severity and pattern of the behaviour. Maintainers hold themselves to the
-same standard — if a maintainer is the problem, escalate to another
-maintainer.
+## Our Standards
 
-This document will evolve as the project grows; suggestions are welcome via
-pull request.
+Examples of behavior that contributes to a positive environment:
+
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints and experiences
+- Gracefully accepting constructive feedback
+- Focusing on what is best for the community
+
+Examples of unacceptable behavior:
+
+- Harassment, insulting, or derogatory comments in any form
+- Publishing others' private information without explicit permission
+- Any conduct that could reasonably be considered inappropriate in a professional setting
+
+## Enforcement
+
+Instances of unacceptable behavior may be reported by opening a confidential
+issue or contacting the maintainers directly via GitHub. All complaints will be
+reviewed and investigated promptly and fairly.

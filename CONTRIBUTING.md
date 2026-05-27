@@ -1,121 +1,36 @@
 # Contributing to promptLM
 
-Thanks for your interest in contributing! This repository hosts
-`dev.promptlm:promptlm-dependencies` (the BOM) and
-`dev.promptlm:promptlm-parent` (the build-policy parent POM) for the promptLM
-project.
+Thank you for your interest in contributing!
 
-This document covers the basics of opening a pull request, our commit
-conventions, and how to build the project locally. Please also read the
-[Code of Conduct](CODE_OF_CONDUCT.md) and the [Security Policy](SECURITY.md).
+## Getting Started
 
-## Reporting Issues
+1. Fork the repository and clone your fork.
+2. Build the project: `mvn clean verify`
+3. Create a feature branch: `git checkout -b feat/your-feature`
 
-- **Bugs and feature requests:** open a GitHub issue with a clear repro or
-  motivation.
-- **Security vulnerabilities:** do **not** open a public issue — follow
-  [SECURITY.md](SECURITY.md) instead.
+## Making Changes
 
-## Pull Request Flow
+- Follow the existing code style and package structure.
+- Add or update tests for every change.
+- Run the full build before opening a pull request: `mvn clean verify`
 
-1. **Fork** the repository and create a feature branch off `main`:
-   ```sh
-   git checkout -b feat/short-topic-name
-   ```
-2. **Make your changes.** Keep PRs small and focused — one logical change per
-   PR. Update or add tests where applicable.
-3. **Run the build** locally (see below) and make sure it passes.
-4. **Push** the branch to your fork and open a pull request against
-   `promptLM/promptlm-platform`'s `main` branch.
-5. A maintainer will review. Address feedback by pushing additional commits
-   (don't force-push during review unless asked).
-6. Once approved, a maintainer will merge. We default to **squash-merge** so
-   the final commit message follows Conventional Commits (see below).
+## License Headers
 
-## Conventional Commits
+All source files must include the Apache 2.0 license header. CI enforces
+this via [`apache/skywalking-eyes`](https://github.com/apache/skywalking-eyes)
+on every PR using the rules in `.licenserc.yaml`. Copy the header from any
+existing source file in the repo when adding a new file. If you'd like to
+check or auto-fix headers locally, install `license-eye` (`brew install
+skywalking-eyes` or `go install github.com/apache/skywalking-eyes/cmd/license-eye@latest`)
+and run `license-eye -c .licenserc.yaml header fix`.
 
-Commit messages and PR titles follow the
-[Conventional Commits](https://www.conventionalcommits.org/) specification:
+## Pull Requests
 
-```
-<type>(<optional scope>): <short summary>
+- Keep pull requests focused — one concern per PR.
+- Reference any related issue in the PR description.
+- All CI checks must pass before a PR can be merged.
 
-<optional body>
+## License
 
-<optional footer(s)>
-```
-
-Common types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `build`,
-`ci`, `perf`, `revert`. Breaking changes are flagged with `!` after the type
-(e.g. `feat!: rename parent artifactId`) or a `BREAKING CHANGE:` footer.
-
-Examples:
-
-- `feat(bom): pin Spring AI to 1.0.0-M5`
-- `fix(parent): correct surefire argLine concatenation`
-- `chore(ci): bump setup-java to v4`
-
-## Developer Certificate of Origin (DCO)
-
-All commits must be signed off under the
-[Developer Certificate of Origin](https://developercertificate.org/). This
-certifies that you wrote the contribution (or otherwise have the right to
-submit it under the project's open-source license).
-
-Add a `Signed-off-by` trailer by passing `-s` to `git commit`:
-
-```sh
-git commit -s -m "feat(parent): add spotless plugin"
-```
-
-This produces a footer like:
-
-```
-Signed-off-by: Your Name <you@example.com>
-```
-
-Set your `user.name` and `user.email` in git config first; the name and email
-must be real.
-
-## Building the Project
-
-The repo uses the Maven Wrapper, so you don't need a system-wide Maven
-install. JDK 21 is required.
-
-```sh
-./mvnw clean install
-```
-
-Useful variants:
-
-```sh
-# Skip tests
-./mvnw -B clean install -DskipTests
-
-# Build just the BOM
-./mvnw -pl promptlm-dependencies -am clean install
-
-# Verify
-./mvnw -B verify
-```
-
-CI runs the equivalent of `mvn -B -ntp clean install` on every push and PR.
-
-## Code Style
-
-License headers are enforced in CI by the
-[`apache/skywalking-eyes/header`](https://github.com/apache/skywalking-eyes)
-action using the rules in `.licenserc.yaml`. Copy the header from any
-existing source file when adding a new file. If you'd like to auto-fix
-locally, install `license-eye` (`brew install skywalking-eyes`) and run
-`license-eye -c .licenserc.yaml header fix`.
-
-A Java formatter is not enforced at build time yet. Plan is to adopt one
-(e.g. googleJavaFormat AOSP or Palantir) in a dedicated one-shot reformat
-PR before wiring it into `verify`.
-
-## Releasing
-
-Maintainers cut releases following [RELEASING.md](RELEASING.md). Releases are
-published to GitHub Packages by the
-[`release.yml`](.github/workflows/release.yml) workflow.
+By contributing you agree that your contributions will be licensed under the
+[Apache License 2.0](LICENSE).
