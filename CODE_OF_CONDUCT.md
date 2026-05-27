@@ -14,7 +14,7 @@ sustained disruption, sexualised language directed at others, and similar
 hostile behaviour are not welcome and will be addressed by maintainers.
 
 If you see or experience behaviour that conflicts with this spirit, please
-report it privately to **conduct@example.invalid**. Reports will be handled
+report it privately to **conduct@promptlm.dev**. Reports will be handled
 discreetly and in good faith. Maintainers may respond with anything from a
 private note to a temporary or permanent ban from project spaces, depending on
 the severity and pattern of the behaviour. Maintainers hold themselves to the
