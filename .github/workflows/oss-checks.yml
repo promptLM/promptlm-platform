@@ -1,0 +1,54 @@
+name: oss-checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Both jobs use continue-on-error so noisy initial findings don't block
+# merges. Tighten to required checks once the baseline is clean.
+jobs:
+  gitleaks:
+    name: gitleaks (secret scan)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    # We install the gitleaks CLI directly instead of using
+    # gitleaks/gitleaks-action@v2 — that wrapper requires a commercial
+    # GITLEAKS_LICENSE secret for org repos. The underlying CLI remains
+    # MIT-licensed and free.
+    env:
+      GITLEAKS_VERSION: "8.21.2"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install gitleaks
+        run: |
+          curl -sSfL \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz gitleaks
+          sudo install -m 0755 gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+      - name: Run gitleaks
+        run: |
+          gitleaks detect \
+            --config .gitleaks.toml \
+            --no-banner \
+            --redact \
+            --verbose \
+            --exit-code 1
+
+  license-eye:
+    name: license-eye (license header check)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Run license-eye header check
+        uses: apache/skywalking-eyes/header@main
+        with:
+          config: .licenserc.yaml
+          mode: check

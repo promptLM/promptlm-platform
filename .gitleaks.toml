@@ -1,0 +1,14 @@
+# gitleaks configuration for promptlm-platform.
+# Extends gitleaks' built-in default ruleset; only adds an allowlist for
+# documentation files (AsciiDoc) which frequently contain example tokens.
+
+title = "promptlm-platform gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allow example tokens inside AsciiDoc documentation."
+paths = [
+    '''(.*?)\.adoc$''',
+]
