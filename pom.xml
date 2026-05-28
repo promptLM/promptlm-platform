@@ -48,4 +48,19 @@
         <module>promptlm-dependencies</module>
         <module>promptlm-parent</module>
     </modules>
+
+    <profiles>
+        <!--
+            This aggregator is a build-reactor convenience, not a consumable
+            artifact. On a Central release the submodules carry the publishing
+            policy (inherited from promptlm-dependencies); the aggregator pom
+            itself must not be deployed.
+        -->
+        <profile>
+            <id>release</id>
+            <properties>
+                <maven.deploy.skip>true</maven.deploy.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>

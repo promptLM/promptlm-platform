@@ -94,4 +94,87 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <profiles>
+        <!--
+            Maven Central release profile. Defined here (the inheritance root) so
+            both this BOM and promptlm-parent are signed + published, and every
+            downstream repo whose parent chain includes promptlm-dependencies
+            inherits the same signing / publishing / reproducible-build policy.
+            Activated with -Prelease in CI only.
+        -->
+        <profile>
+            <id>release</id>
+            <properties>
+                <!-- Reproducible build: stamp artifacts with the commit time, not build time. -->
+                <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.github.git-commit-id</groupId>
+                        <artifactId>git-commit-id-maven-plugin</artifactId>
+                        <version>10.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>resolve-git-commit-time</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>revision</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--
+                                Default dateFormat uses Z (+0000); Reproducible Central
+                                rejects it. XXX yields +00:00. UTC pins the zone.
+                            -->
+                            <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
+                            <dateFormatTimeZone>UTC</dateFormatTimeZone>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <!--
+                                        Default signer 'gpg' uses the local GnuPG keyring
+                                        that actions/setup-java imports the key into. The
+                                        'bc' signer needs MAVEN_GPG_KEY, which setup-java
+                                        does not emit. loopback pinentry lets the headless
+                                        runner read the passphrase non-interactively.
+                                    -->
+                                    <signer>gpg</signer>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.10.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <!-- Upload + validate only; the promote job publishes (irreversible). -->
+                            <autoPublish>false</autoPublish>
+                            <waitUntil>validated</waitUntil>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
