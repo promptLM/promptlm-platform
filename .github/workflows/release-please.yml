@@ -38,7 +38,8 @@ jobs:
       contents: read
       id-token: write
       attestations: write
-    uses: ./.github/workflows/release-java-central.yml
+    uses: promptLM/.github/.github/workflows/release-java-central.yml@main
     with:
       version: ${{ needs.release-please.outputs.tag_name }}
+      probe-path: dev/promptlm/promptlm-parent
     secrets: inherit
