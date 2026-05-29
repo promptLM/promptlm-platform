@@ -1,0 +1,28 @@
+name: release-please
+
+# Manages the Release PR and, on merge, creates the GitHub Release + tag.
+# The created release fires release-java-central.yml (release: created).
+#
+# IMPORTANT: a release created with the default GITHUB_TOKEN does NOT trigger
+# other workflows (GitHub loop-prevention), so release-java-central would never
+# fire. release-please must therefore run with a PAT or GitHub App token
+# (RELEASE_PLEASE_TOKEN) that is allowed to create releases and re-trigger CI.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
