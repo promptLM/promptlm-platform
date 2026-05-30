@@ -1,0 +1,33 @@
+name: release-dispatch
+
+# Manual release / dry-run entry point for promptlm-platform. Delegates to the
+# org-wide reusable Java workflow. Use dry-run=true to exercise the pipeline
+# (validate -> verify -> smoke-sign -> build+sign) without uploading anything.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (must already be set in the poms)'
+        required: true
+        type: string
+      dry-run:
+        description: 'Build and sign but do not deploy or promote'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    uses: promptLM/.github/.github/workflows/release-java-central.yml@main
+    with:
+      version: ${{ inputs.version }}
+      dry-run: ${{ inputs.dry-run }}
+      probe-path: dev/promptlm/promptlm-parent
+    secrets: inherit

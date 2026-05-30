@@ -20,15 +20,38 @@ combination.
 
 ## Cutting a release
 
+Releases are driven by [release-please](https://github.com/googleapis/release-please)
+from Conventional Commits — manual `mvn versions:set` + tag pushing is no longer
+the path. The publish itself is delegated to the org-wide reusable workflow
+[`release-java-central.yml`](https://github.com/promptLM/.github/blob/main/.github/workflows/release-java-central.yml).
+
 1. Open a tracking issue titled `release: promptlm-platform X.Y.Z` and list
    every library version going into the train.
-2. Bump `<version>` in the aggregator and both modules:
-   `mvn versions:set -DnewVersion=X.Y.Z -DprocessAllModules=true`.
-3. Commit on `main` with message `chore: release X.Y.Z`.
-4. Tag: `git tag -a vX.Y.Z -m "promptlm-platform X.Y.Z"` and push.
-5. Create the GitHub release. `release.yml` runs on the `release: created`
-   event and publishes both artifacts to GitHub Packages.
-6. Bump `main` back to `X.Y.(Z+1)-SNAPSHOT`.
+2. Land Conventional Commits on `main` (`feat:`, `fix:`, `chore:` etc.).
+   release-please opens / updates a Release PR with the computed version
+   bump in `pom.xml`, `promptlm-dependencies/pom.xml`, `promptlm-parent/pom.xml`,
+   and the changelog.
+3. Review the Release PR. Once green, merge it. release-please then creates
+   the GitHub Release + tag `vX.Y.Z` via the GitHub API.
+4. `release-please.yml` chains directly to the org `release-java-central.yml`
+   reusable workflow (no PAT — releases created with the default
+   `GITHUB_TOKEN` don't re-trigger workflows, so we call it inline). The
+   workflow runs validate → verify → smoke-sign → deploy and uploads to the
+   Central Portal in `VALIDATED` state.
+5. The `promote` job pauses on the `maven-central-publish` environment for
+   human approval. Approving promotes the deployment to `PUBLISHED`
+   (irreversible). Rejecting leaves the deployment in the Portal UI for up
+   to 90 days; it can be dropped without publishing.
+
+For a manual or dry-run release, dispatch `release-dispatch.yml` with
+`version=X.Y.Z` and optionally `dry-run=true` (builds + signs without
+uploading anything).
+
+### First-release bootstrap
+
+The release-please manifest starts at `0.0.0`. To cut `0.1.0` as the first
+release, include a `Release-As: 0.1.0` footer on the commit that triggers
+release-please (or apply the `release-as: 0.1.0` label to the Release PR).
 
 ## Changelog
 

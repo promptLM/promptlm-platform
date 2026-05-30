@@ -1,0 +1,45 @@
+name: release-please
+
+# Runs on every push to main. release-please maintains a Release PR; when that
+# PR is merged it creates the GitHub Release + tag and sets release_created.
+# We then call the publish workflow directly in the same run.
+#
+# Why call it directly instead of relying on a `release: created` trigger:
+# release-please runs on the default GITHUB_TOKEN, and releases created with
+# that token do NOT re-trigger other workflows (GitHub loop-prevention). The
+# direct workflow_call needs no PAT and still pauses on the maven-central-publish
+# environment gate in the promote job.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    uses: promptLM/.github/.github/workflows/release-java-central.yml@main
+    with:
+      version: ${{ needs.release-please.outputs.tag_name }}
+      probe-path: dev/promptlm/promptlm-parent
+    secrets: inherit
