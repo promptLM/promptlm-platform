@@ -1,63 +1,62 @@
 # Releasing promptlm-platform
 
-This document describes the release-train cadence for the
+This document describes how to cut a release of the
 `dev.promptlm:promptlm-dependencies` + `dev.promptlm:promptlm-parent` pair.
 
-## Versioning policy: semver on the BOM
+## Versioning
 
-Per [ADR 0004](https://github.com/promptLM/promptlm-test-support/blob/main/docs/adr/0004-platform-parent-and-bom-proposed.md)
-D2, the BOM carries the compatibility contract. `promptlm-parent` ships in
-lockstep with the BOM (ADR 0004 D-Open-Q-7).
+The BOM carries the compatibility contract and `promptlm-parent` ships in
+lockstep with the BOM (see [ADR 0004](https://github.com/promptLM/promptlm-test-support/blob/main/docs/adr/0004-platform-parent-and-bom-proposed.md)
+D2, D-Open-Q-7). Bumps follow semver:
 
-- **Major bump (`X.0.0`)** — at least one contained library or third-party
-  anchor has a breaking change (API removal, signature change, or major
-  upstream bump like Spring Boot 3 → 4).
-- **Minor bump (`X.Y.0`)** — additive only: new library entry, new
-  build-policy plugin, dependency minor bump.
-- **Patch bump (`X.Y.Z`)** — bugfix only across contained libraries; no API
-  change.
+- **Major (`X.0.0`)** — at least one contained library or third-party anchor
+  has a breaking change.
+- **Minor (`X.Y.0`)** — additive: new library entry, new build-policy plugin,
+  dependency minor bump.
+- **Patch (`X.Y.Z`)** — bugfix only; no API change.
 
 Libraries keep their own semver inside the BOM; the BOM stamps a tested
 combination.
 
-## Cadence
+## Cutting a release
 
-- **Minor releases: monthly.** Cut on the first Monday of each month if
-  there is anything to ship. Skip the month if the BOM is unchanged.
-- **Major releases: quarterly.** Cut at most once per calendar quarter,
-  bundled with a written migration guide and the contained libraries'
-  major bumps. While on the 0.x line, minor bumps may carry breaking
-  changes; the first major (`1.0.0`) marks the stable contract.
-- **Patch releases: as needed.** No fixed cadence; cut on demand when a
-  contained library ships a bugfix that downstream repos need
-  immediately.
+Releases are driven by [release-please](https://github.com/googleapis/release-please)
+from Conventional Commits — manual `mvn versions:set` + tag pushing is no longer
+the path. The publish itself is delegated to the org-wide reusable workflow
+[`release-java-central.yml`](https://github.com/promptLM/.github/blob/main/.github/workflows/release-java-central.yml).
 
-## Train shape
+1. Open a tracking issue titled `release: promptlm-platform X.Y.Z` and list
+   every library version going into the train.
+2. Land Conventional Commits on `main` (`feat:`, `fix:`, `chore:` etc.).
+   release-please opens / updates a Release PR with the computed version
+   bump in `pom.xml`, `promptlm-dependencies/pom.xml`, `promptlm-parent/pom.xml`,
+   and the changelog.
+3. Review the Release PR. Once green, merge it. release-please then creates
+   the GitHub Release + tag `vX.Y.Z` via the GitHub API.
+4. `release-please.yml` chains directly to the org `release-java-central.yml`
+   reusable workflow (no PAT — releases created with the default
+   `GITHUB_TOKEN` don't re-trigger workflows, so we call it inline). The
+   workflow runs validate → verify → smoke-sign → deploy and uploads to the
+   Central Portal in `VALIDATED` state.
+5. The `promote` job pauses on the `maven-central-publish` environment for
+   human approval. Approving promotes the deployment to `PUBLISHED`
+   (irreversible). Rejecting leaves the deployment in the Portal UI for up
+   to 90 days; it can be dropped without publishing.
 
-| Version | Anchor                | Status                                                                 |
-| ------- | --------------------- | ---------------------------------------------------------------------- |
-| 0.x     | Spring Boot 4.x       | **Current.** Pre-stable line; first release `0.1.0`. Breaking changes allowed between minors. |
-| 1.x     | Spring Boot 4.x       | Planned. First stable train once the BOM contents are settled.         |
+For a manual or dry-run release, dispatch `release-dispatch.yml` with
+`version=X.Y.Z` and optionally `dry-run=true` (builds + signs without
+uploading anything).
 
-## Version selection process
+### First-release bootstrap
 
-1. Open a tracking issue titled `release: promptlm-platform X.Y.Z` and
-   list every library version going into the train.
-2. Bump `<version>` in the aggregator + both modules:
-   `mvn versions:set -DnewVersion=X.Y.Z -DprocessAllModules=true`.
-3. Commit the version bump on `main` with message
-   `chore: release X.Y.Z`.
-4. Tag: `git tag -a vX.Y.Z -m "promptlm-platform X.Y.Z"` and push.
-5. Create the GitHub release. The `release.yml` workflow runs on the
-   `release: created` event and publishes both artifacts to GitHub
-   Packages.
-6. Bump `main` back to `X.Y.(Z+1)-SNAPSHOT` so subsequent commits don't
-   collide with the released version.
+The release-please manifest starts at `0.0.0`. To cut `0.1.0` as the first
+release, include a `Release-As: 0.1.0` footer on the commit that triggers
+release-please (or apply the `release-as: 0.1.0` label to the Release PR).
 
 ## Changelog
 
-The canonical changelog is the **GitHub releases page**
-([promptLM/promptlm-platform/releases](https://github.com/promptLM/promptlm-platform/releases)).
+The canonical changelog is the
+[GitHub releases page](https://github.com/promptLM/promptlm-platform/releases).
 Each release's body lists what changed in the BOM and parent since the
-previous train. Migration notes for major bumps live in the same body
-under a `## Migration` heading.
+previous one. Migration notes for major bumps live under a `## Migration`
+heading in the same body.

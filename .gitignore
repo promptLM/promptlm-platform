@@ -3,3 +3,7 @@ target/
 *.iml
 .DS_Store
 .mvn/wrapper/maven-wrapper.jar
+
+# Local secrets / env files — must never be committed.
+.env
+.env.*

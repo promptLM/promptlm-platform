@@ -53,7 +53,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test-classic</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -137,6 +137,18 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+            <!--
+                License header enforcement is handled in CI by the
+                apache/skywalking-eyes/header GitHub Action
+                (.github/workflows/oss-checks.yml + .licenserc.yaml).
+                There is no stable skywalking-eyes Maven plugin on Central,
+                so the action is the authoritative cross-language check.
+
+                Java formatting is intentionally not enforced at the build
+                level yet. Adopt a formatter (googleJavaFormat AOSP, Palantir,
+                or similar) in a dedicated one-shot reformat PR before
+                re-introducing build-time enforcement.
+            -->
         </plugins>
     </build>
 
@@ -207,5 +219,6 @@
                 <surefire.extraArgs>-XX:+EnableDynamicAgentLoading</surefire.extraArgs>
             </properties>
         </profile>
+
     </profiles>
 </project>

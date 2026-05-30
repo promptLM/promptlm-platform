@@ -25,6 +25,14 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <name>promptLM</name>
+            <organization>promptLM</organization>
+            <organizationUrl>https://github.com/promptLM</organizationUrl>
+        </developer>
+    </developers>
+
     <scm>
         <connection>scm:git:https://github.com/promptLM/promptlm-platform.git</connection>
         <developerConnection>scm:git:https://github.com/promptLM/promptlm-platform.git</developerConnection>
