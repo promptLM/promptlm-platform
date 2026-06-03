@@ -49,28 +49,9 @@ Inherits pinned versions only — no build policy.
 
 ### Repository setup
 
-Artifacts are published to GitHub Packages. Add this to `~/.m2/settings.xml`:
-
-```xml
-<servers>
-    <server>
-        <id>github</id>
-        <username>YOUR_GITHUB_USERNAME</username>
-        <password>YOUR_GITHUB_PAT_WITH_READ_PACKAGES</password>
-    </server>
-</servers>
-```
-
-And in any consumer pom, declare the repository:
-
-```xml
-<repositories>
-    <repository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/promptLM/promptlm-platform</url>
-    </repository>
-</repositories>
-```
+Artifacts are published to [Maven Central](https://central.sonatype.com/namespace/dev.promptlm).
+No `<repositories>` block and no `~/.m2/settings.xml` configuration is required —
+Central is on every Maven installation's default resolver list.
 
 ## Versioning
 
